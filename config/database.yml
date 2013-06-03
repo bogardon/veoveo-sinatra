@@ -1,0 +1,7 @@
+development:
+  adapter: postgresql
+  database: veoveo_development
+  username: <%= ENV['USER'] %>
+  pool: 5
+  encoding: unicode
+  host: localhost
