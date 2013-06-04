@@ -1,13 +1,6 @@
-#The environment variable DATABASE_URL should be in the following format:
-# => postgres://{user}:{password}@{host}:{port}/path
 configure :development do
-  db = URI.parse('postgres://jzw@localhost/veoveo_development')
-  ActiveRecord::Base.establish_connection(
-      :adapter => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
-      :host     => db.host,
-      :username => db.user,
-      :password => db.password,
-      :database => db.path[1..-1],
-      :encoding => 'utf8'
-  )
+  environment = ENV['RACK_ENV'] || 'development'
+  db_config = YAML.load(ERB.new(File.read("./config/database.yml")).result)
+  db = db_config[environment]
+  ActiveRecord::Base.establish_connection(db)
 end
