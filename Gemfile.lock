@@ -12,12 +12,20 @@ GEM
     activesupport (3.2.13)
       i18n (= 0.6.1)
       multi_json (~> 1.0)
+    addressable (2.3.4)
     arel (3.0.2)
     builder (3.0.4)
     daemons (1.1.9)
     eventmachine (1.0.3)
+    faraday (0.8.7)
+      multipart-post (~> 1.1)
     i18n (0.6.1)
+    koala (1.6.0)
+      addressable (~> 2.2)
+      faraday (~> 0.8)
+      multi_json (~> 1.3)
     multi_json (1.7.5)
+    multipart-post (1.2.0)
     pg (0.15.1)
     rack (1.5.2)
     rack-protection (1.5.0)
@@ -41,6 +49,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  koala
   pg
   sinatra
   sinatra-activerecord
