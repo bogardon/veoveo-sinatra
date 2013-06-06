@@ -1,4 +1,10 @@
 # app.rb
+require 'rubygems'
+require 'bundler'
+Bundler.require
+require './config/environments'
+require './models/user'
+require './models/facebook'
 
 before do
   content_type 'application/json'
@@ -8,6 +14,7 @@ get '/' do
   "Hello, world!"
 end
 
-post 'facebook_connect' do
-
+post '/users' do
+  @user = User.create(params[:username], params[:password], params[:email])
+  response.status = 201
 end
