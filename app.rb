@@ -6,6 +6,10 @@ require './config/environments'
 require './models/user'
 require './models/facebook'
 
+use Rack::Auth::Basic, "Restricted Area" do |username, password|
+  username == 'veoveo' and password == 'lolumad'
+end
+
 before do
   content_type 'application/json'
 end
