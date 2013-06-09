@@ -30,3 +30,16 @@ post '/users/sign_up' do
     body(@user.to_json)
   end
 end
+
+post '/users/sign_in' do
+  body = request.body.read
+  json = JSON.parse(body)
+  @user = User.sign_in json
+  if @user.errors.messages.any?
+    status 400
+    body(@user.errors.messages.to_json)
+  else
+    status 201
+    body(@user.to_json)
+  end
+end

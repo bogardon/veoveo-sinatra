@@ -4,8 +4,13 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :email
   validates_presence_of :username, :email, :password
 
-  def encrypt_password
-    self.password = Digest::SHA1.base64digest(self.password)
+  def self.sign_in(json)
+    username = json['username']
+    user = User.find_by_username username
+    user.errors.messages[:username] = "who is #{username}?" if user.nil?
+    verified = user.password == Digest::SHA1.base64digest(json['password'])
+    user.errors.messages[:password] = "incorrect password" unless verified
+    user
   end
 
   def self.sign_up(json)
@@ -16,5 +21,9 @@ class User < ActiveRecord::Base
 
   def to_json
     super :except => [:password]
+  end
+
+  def encrypt_password
+    self.password = Digest::SHA1.base64digest(self.password)
   end
 end
