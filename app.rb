@@ -14,7 +14,15 @@ get '/' do
   "Hello, world!"
 end
 
-post '/users' do
-  @user = User.create(params[:username], params[:password], params[:email])
-  response.status = 201
+post '/users/sign_up' do
+  body = request.body.read
+  json = JSON.parse(body)
+  @user = User.sign_up json
+  if @user.errors.messages.any?
+    status 400
+    body(@user.errors.messages.to_json)
+  else
+    status 201
+    body(@user.to_json)
+  end
 end
