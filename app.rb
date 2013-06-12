@@ -8,6 +8,8 @@ require './models/facebook'
 require './models/spot'
 require './models/answer'
 
+Rabl.register!
+
 use Rack::PostBodyContentTypeParser
 use Rack::Auth::Basic, "Restricted Area" do |username, password|
   username == 'veoveo' and password == 'lolumad'
@@ -48,7 +50,12 @@ end
 get '/spots' do
   halt 401 unless @current_user
   status 200
-  body(Spot.where(:user_id => @current_user.id).to_json)
+  @spots = Spot.in_region(params['region'])
+  rabl :spots, :format => "json"
+end
+
+get '/spots/:id' do
+
 end
 
 post '/users/avatar' do
