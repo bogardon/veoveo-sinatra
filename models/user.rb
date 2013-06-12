@@ -1,6 +1,9 @@
 class User < ActiveRecord::Base
+  include Paperclip::Glue
+  attr_accessible :avatar, :username, :password, :email
   has_one :facebook
   before_create :encrypt_password
+  has_attached_file :avatar, styles: {thumb: "100x100#", full: "640x640#"}
   before_create :encrypt_password, :generate_api_token
   validates_uniqueness_of :username, :email
   validates_presence_of :username, :email, :password
@@ -21,7 +24,15 @@ class User < ActiveRecord::Base
   end
 
   def to_json
-    super :except => [:password]
+    super :except => [:password,
+                      :updated_at,
+                      :created_at,
+                      :avatar_content_type,
+                      :avatar_file_size,
+                      :avatar_updated_at,
+                      :avatar_file_name],
+          :methods => [:avatar_url_thumb,
+                       :avatar_url_full]
   end
 
   def encrypt_password
@@ -34,5 +45,13 @@ class User < ActiveRecord::Base
     begin
       self.api_token = SecureRandom.hex
     end while self.class.exists?(api_token: api_token)
+  end
+
+  def avatar_url_thumb
+    avatar.url(:thumb)
+  end
+
+  def avatar_url_full
+    avatar.url(:full)
   end
 end
