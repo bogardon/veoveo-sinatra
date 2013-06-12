@@ -23,25 +23,25 @@ get '/' do
   "Hello, world!"
 end
 
-post '/users/sign_up' do
+post '/users/signup' do
   @user = User.sign_up params
   if @user.errors.messages.any?
     status 400
     body(@user.errors.messages.to_json)
   else
     status 201
-    body(@user.to_json)
+    rabl :users_signup, :format => "json"
   end
 end
 
-post '/users/sign_in' do
+post '/users/signin' do
   @user = User.sign_in params
   if @user.nil? || @user.errors.messages.any?
     status 400
     body({errors: "incorrect username or password"}.to_json)
   else
     status 201
-    body(@user.to_json)
+    rabl :users_signin, :format => "json"
   end
 end
 

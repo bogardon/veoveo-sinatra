@@ -31,18 +31,6 @@ class User < ActiveRecord::Base
     user
   end
 
-  def serializable_hash(options={})
-    super options.merge(:except => [:password,
-                      :updated_at,
-                      :created_at,
-                      :avatar_content_type,
-                      :avatar_file_size,
-                      :avatar_updated_at,
-                      :avatar_file_name],
-          :methods => [:avatar_url_thumb,
-                       :avatar_url_full])
-  end
-
   def encrypt_password
     self.password = Digest::SHA1.base64digest(self.password)
   end
