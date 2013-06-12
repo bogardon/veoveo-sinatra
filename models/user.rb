@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
     user
   end
 
-  def as_json(options)
+  def serializable_hash(options={})
     super options.merge(:except => [:password,
                       :updated_at,
                       :created_at,
