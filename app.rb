@@ -43,3 +43,16 @@ post '/users/sign_in' do
     body(@user.to_json)
   end
 end
+post '/users/avatar' do
+  halt 401 unless @current_user
+  image_data = params['avatar'][:tempfile]
+  @current_user.avatar = image_data if image_data
+  if @current_user.save
+    status 201
+    body(@current_user.to_json)
+  else
+    status 400
+    body("fix your request".to_json)
+  end
+end
+
