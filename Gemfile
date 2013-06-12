@@ -11,6 +11,7 @@ gem 'rake'
 gem 'paperclip'
 gem 'aws-sdk'
 gem 'rack-contrib'
+gem 'rabl'
 
 group :development do
   gem 'shotgun'
