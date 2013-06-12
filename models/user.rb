@@ -11,9 +11,9 @@ class User < ActiveRecord::Base
   def self.sign_in(json)
     username = json['username']
     user = User.find_by_username username
-    user.errors.messages[:username] = "who is #{username}?" if user.nil?
-    verified = user.password == Digest::SHA1.base64digest(json['password'])
-    user.errors.messages[:password] = "incorrect password" unless verified
+    if user && user.password != Digest::SHA1.base64digest(json['password'])
+      user.errors.messages[:password] = "incorrect password"
+    end
     user
   end
 

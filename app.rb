@@ -34,12 +34,10 @@ post '/users/sign_up' do
 end
 
 post '/users/sign_in' do
-  body = request.body.read
-  json = JSON.parse(body)
-  @user = User.sign_in json
-  if @user.errors.messages.any?
+  @user = User.sign_in params
+  if @user.nil? || @user.errors.messages.any?
     status 400
-    body(@user.errors.messages.to_json)
+    body({errors: "incorrect username or password"}.to_json)
   else
     status 201
     body(@user.to_json)
