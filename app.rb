@@ -12,6 +12,8 @@ end
 
 before do
   content_type 'application/json'
+  api_token = request.env['HTTP_X_VEOVEO_API_TOKEN']
+  @current_user = User.find_by_api_token(api_token) if api_token
 end
 
 get '/' do
