@@ -1,11 +1,12 @@
 class Spot < ActiveRecord::Base
   belongs_to :user
-  has_many :answers
+  has_many :answers, :dependent => :destroy
 
-  def serializable_hash(options={})
+  attr_accessible :latitude, :longitude, :hint
 
-    super options.merge(:except => [:created_at,
-                      :updated_at,
-                      :user_id])
+  def self.in_region(region)
+    latitude_range = (region['latitude'].to_f-region['latitude_delta'].to_f/2)..(region['latitude'].to_f+region['latitude_delta'].to_f/2)
+    longitude_range = (region['longitude'].to_f-region['longitude_delta'].to_f/2)..(region['longitude'].to_f+region['longitude_delta'].to_f/2)
+    includes(:answers).where(:latitude => latitude_range, :longitude => longitude_range)
   end
 end
