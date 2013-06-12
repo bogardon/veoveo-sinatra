@@ -6,6 +6,7 @@ require './config/environments'
 require './models/user'
 require './models/facebook'
 
+use Rack::PostBodyContentTypeParser
 use Rack::Auth::Basic, "Restricted Area" do |username, password|
   username == 'veoveo' and password == 'lolumad'
 end

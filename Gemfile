@@ -10,6 +10,7 @@ gem 'koala'
 gem 'rake'
 gem 'paperclip'
 gem 'aws-sdk'
+gem 'rack-contrib'
 
 group :development do
   gem 'shotgun'
