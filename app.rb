@@ -5,6 +5,8 @@ Bundler.require
 require './config/environments'
 require './models/user'
 require './models/facebook'
+require './models/spot'
+require './models/answer'
 
 use Rack::PostBodyContentTypeParser
 use Rack::Auth::Basic, "Restricted Area" do |username, password|
@@ -22,9 +24,7 @@ get '/' do
 end
 
 post '/users/sign_up' do
-  body = request.body.read
-  json = JSON.parse(body)
-  @user = User.sign_up json
+  @user = User.sign_up params
   if @user.errors.messages.any?
     status 400
     body(@user.errors.messages.to_json)
@@ -44,6 +44,13 @@ post '/users/sign_in' do
     body(@user.to_json)
   end
 end
+
+get '/spots' do
+  halt 401 unless @current_user
+  status 200
+  body(Spot.where(:user_id => @current_user.id).to_json)
+end
+
 post '/users/avatar' do
   halt 401 unless @current_user
   image_data = params['avatar'][:tempfile]
@@ -57,3 +64,15 @@ post '/users/avatar' do
   end
 end
 
+post '/spots' do
+  halt 401 unless @current_user
+  @spot = Spot.new params
+  @spot.user = @current_user
+  if @spot.save
+    status 201
+    body(@spot.to_json)
+  else
+    status 400
+    body("i dont fucking know".to_json)
+  end
+end

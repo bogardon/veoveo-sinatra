@@ -1,10 +1,18 @@
 class User < ActiveRecord::Base
   include Paperclip::Glue
+
   attr_accessible :avatar, :username, :password, :email
+
+  # relations
   has_one :facebook
-  before_create :encrypt_password
+  has_many :spots
+  has_many :answers
   has_attached_file :avatar, styles: {thumb: "100x100#", full: "640x640#"}
+
+  # filters
   before_create :encrypt_password, :generate_api_token
+
+  # validations
   validates_uniqueness_of :username, :email
   validates_presence_of :username, :email, :password
 
