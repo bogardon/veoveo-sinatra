@@ -31,8 +31,8 @@ class User < ActiveRecord::Base
     user
   end
 
-  def to_json
-    super :except => [:password,
+  def as_json(options)
+    super options.merge(:except => [:password,
                       :updated_at,
                       :created_at,
                       :avatar_content_type,
@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
                       :avatar_updated_at,
                       :avatar_file_name],
           :methods => [:avatar_url_thumb,
-                       :avatar_url_full]
+                       :avatar_url_full])
   end
 
   def encrypt_password
