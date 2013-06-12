@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_one :facebook
   before_create :encrypt_password
+  before_create :encrypt_password, :generate_api_token
   validates_uniqueness_of :username, :email
   validates_presence_of :username, :email, :password
 
@@ -25,5 +26,13 @@ class User < ActiveRecord::Base
 
   def encrypt_password
     self.password = Digest::SHA1.base64digest(self.password)
+  end
+
+  def generate_api_token
+    # Generate a random hexadecimal string to use as the API token.
+    # Check to see if another key exists with the same token and regenerates the token if this is the case.
+    begin
+      self.api_token = SecureRandom.hex
+    end while self.class.exists?(api_token: api_token)
   end
 end
