@@ -6,4 +6,6 @@ class Answer < ActiveRecord::Base
 
   has_attached_file :image, styles: {small: "320x320#", large: "640x640#"}
 
+  attr_accessible :image
+
 end
