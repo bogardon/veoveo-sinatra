@@ -55,7 +55,15 @@ get '/spots' do
 end
 
 get '/spots/:id' do
-
+  halt 401 unless @current_user
+  @spot = Spot.includes(:answers => :user).find(params[:id])
+  if @spot
+    status 200
+    rabl :spots_id, :format => "json"
+  else
+    status 400
+    body("spot with #{params[:id]} does not exist".to_json)
+  end
 end
 
 post '/users/avatar' do
@@ -73,13 +81,20 @@ end
 
 post '/spots' do
   halt 401 unless @current_user
-  @spot = Spot.new params
+  @spot = Spot.new params.slice('latitude', 'longitude', 'hint')
   @spot.user = @current_user
+
+  @answer = Answer.new
+  @answer.image = params['image'][:tempfile]
+  @answer.user = @current_user
+
+  @spot.answers << @answer
+
   if @spot.save
     status 201
     body(@spot.to_json)
   else
     status 400
-    body("i dont fucking know".to_json)
+    body("something went wrong duh".to_json)
   end
 end
