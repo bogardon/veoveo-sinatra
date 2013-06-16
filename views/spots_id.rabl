@@ -9,7 +9,7 @@ node(:unlocked) do |spot|
 end
 
 child :answers do
-  attributes :id
+  attributes :id, :created_at
 
   node(:image_url_small) do |answer|
     answer.image.url(:small)
