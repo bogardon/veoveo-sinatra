@@ -79,6 +79,25 @@ post '/users/avatar' do
   end
 end
 
+post '/answers' do
+  halt 401 unless @current_user
+
+  @spot = Spot.find(params["spot_id"])
+
+  @answer = Answer.new
+  @answer.image = params['image'][:tempfile]
+  @answer.user = @current_user
+  @answer.spot = @spot
+
+  if @answer.save
+    status 201
+    rabl :answers, :format => "json"
+  else
+    status 400
+    body("i don't know why this failed".to_json)
+  end
+end
+
 post '/spots' do
   halt 401 unless @current_user
   @spot = Spot.new params.slice('latitude', 'longitude', 'hint')
