@@ -8,7 +8,7 @@ node(:unlocked) do |spot|
   end
 end
 
-child :answers do
+child :answers, :object_root => false do
   attributes :id, :created_at
 
   node(:image_url_small) do |answer|
