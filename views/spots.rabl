@@ -1,6 +1,6 @@
 collection @spots
 
-attributes :id, :latitude, :longitude, :hint
+attributes :id, :latitude, :longitude, :hint, :created_at
 
 node(:unlocked) do |spot|
   spot.answers.any? do |answer|
