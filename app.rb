@@ -111,7 +111,7 @@ post '/spots' do
 
   if @spot.save
     status 201
-    body(@spot.to_json)
+    rabl :spots_create, :format => "json"
   else
     status 400
     body("something went wrong duh".to_json)
