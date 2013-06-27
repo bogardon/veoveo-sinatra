@@ -18,8 +18,10 @@ end
 
 before do
   content_type 'application/json'
+  pass if %w[signup signin].include? request.path_info.split('/').last
   api_token = request.env['HTTP_X_VEOVEO_API_TOKEN']
   @current_user = User.find_by_api_token(api_token) if api_token
+  halt 401, "requires api token" unless @current_user
 end
 
 get '/' do
@@ -49,21 +51,18 @@ post '/users/signin' do
 end
 
 get '/answers' do
-  halt 401 unless @current_user
   followed_users_ids = @current_user.followed_users.map(&:id)
   @answers = Answer.includes(:spot, :user).where(:user_id => followed_users_ids)
   rabl :get_answers, :format => "json"
 end
 
 get '/spots' do
-  halt 401 unless @current_user
   status 200
   @spots = Spot.in_region(params['region'])
   rabl :get_spots, :format => "json"
 end
 
 get '/spots/:id' do
-  halt 401 unless @current_user
   @spot = Spot.includes(:answers => :user).find(params[:id])
   if @spot
     status 200
@@ -75,7 +74,6 @@ get '/spots/:id' do
 end
 
 post '/users/avatar' do
-  halt 401 unless @current_user
   image_data = params['avatar'][:tempfile]
   @current_user.avatar = image_data if image_data
   if @current_user.save
@@ -88,7 +86,6 @@ post '/users/avatar' do
 end
 
 get '/users/:id' do
-  halt 401 unless @current_user
   @user = User.includes(:answers => :spot).find(params[:id])
   if @user
     status 200
@@ -100,8 +97,6 @@ get '/users/:id' do
 end
 
 post '/answers' do
-  halt 401 unless @current_user
-
   @spot = Spot.find(params["spot_id"])
 
   @answer = Answer.new
@@ -119,7 +114,6 @@ post '/answers' do
 end
 
 post '/spots' do
-  halt 401 unless @current_user
   @spot = Spot.new params.slice('latitude', 'longitude', 'hint')
   @spot.user = @current_user
 
