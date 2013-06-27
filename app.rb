@@ -79,6 +79,18 @@ post '/users/avatar' do
   end
 end
 
+get '/users/:id' do
+  halt 401 unless @current_user
+  @user = User.includes(:answers => :spot).find(params[:id])
+  if @user
+    status 200
+    rabl :users_id, :format => "json"
+  else
+    status 400
+    body("User not found".to_json)
+  end
+end
+
 post '/answers' do
   halt 401 unless @current_user
 
