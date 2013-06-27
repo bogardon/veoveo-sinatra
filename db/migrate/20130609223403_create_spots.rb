@@ -7,6 +7,6 @@ class CreateSpots < ActiveRecord::Migration
       t.references :user
       t.timestamps
     end
-    add_index :spots, :user_id
+    add_index :spots, [:latitude, :longitude]
   end
 end

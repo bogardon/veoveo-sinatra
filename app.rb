@@ -7,6 +7,7 @@ require './models/user'
 require './models/facebook'
 require './models/spot'
 require './models/answer'
+require './models/relationship'
 
 Rabl.register!
 

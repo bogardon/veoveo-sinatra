@@ -4,10 +4,14 @@ class User < ActiveRecord::Base
   attr_accessible :avatar, :username, :password, :email
 
   # relations
-  has_one :facebook
-  has_many :spots
-  has_many :answers
+  has_one :facebook, dependent: :destroy
+  has_many :spots, dependent: :destroy
+  has_many :answers, dependent: :destroy
   has_attached_file :avatar, styles: {thumb: "100x100#", full: "640x640#"}
+  has_many :relationships, foreign_key: "follower_id", dependent: :destroy
+  has_many :reverse_relationships, foreign_key: "followed_id", class_name: "Relationship", dependent: :destroy
+  has_many :followers, through: :reverse_relationships, source: :follower
+  has_many :followed_users, through: :relationships, source: :followed
 
   # filters
   before_create :encrypt_password, :generate_api_token
