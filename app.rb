@@ -33,7 +33,7 @@ post '/users/signup' do
     body(@user.errors.messages.to_json)
   else
     status 201
-    rabl :users_signup, :format => "json"
+    rabl :post_users_signup, :format => "json"
   end
 end
 
@@ -44,15 +44,22 @@ post '/users/signin' do
     body({errors: "incorrect username or password"}.to_json)
   else
     status 201
-    rabl :users_signin, :format => "json"
+    rabl :post_users_signin, :format => "json"
   end
+end
+
+get '/answers' do
+  halt 401 unless @current_user
+  followed_users_ids = @current_user.followed_users.map(&:id)
+  @answers = Answer.includes(:spot, :user).where(:user_id => followed_users_ids)
+  rabl :get_answers, :format => "json"
 end
 
 get '/spots' do
   halt 401 unless @current_user
   status 200
   @spots = Spot.in_region(params['region'])
-  rabl :spots, :format => "json"
+  rabl :get_spots, :format => "json"
 end
 
 get '/spots/:id' do
@@ -60,7 +67,7 @@ get '/spots/:id' do
   @spot = Spot.includes(:answers => :user).find(params[:id])
   if @spot
     status 200
-    rabl :spots_id, :format => "json"
+    rabl :get_spots_id, :format => "json"
   else
     status 400
     body("spot with #{params[:id]} does not exist".to_json)
@@ -73,7 +80,7 @@ post '/users/avatar' do
   @current_user.avatar = image_data if image_data
   if @current_user.save
     status 201
-    body(@current_user.to_json)
+    rabl :post_users_avatar, :format => :json
   else
     status 400
     body("fix your request".to_json)
@@ -85,7 +92,7 @@ get '/users/:id' do
   @user = User.includes(:answers => :spot).find(params[:id])
   if @user
     status 200
-    rabl :users_id, :format => "json"
+    rabl :get_users_id, :format => "json"
   else
     status 400
     body("User not found".to_json)
@@ -104,7 +111,7 @@ post '/answers' do
 
   if @answer.save
     status 201
-    rabl :answers, :format => "json"
+    rabl :post_answers, :format => "json"
   else
     status 400
     body("i don't know why this failed".to_json)
@@ -124,7 +131,7 @@ post '/spots' do
 
   if @spot.save
     status 201
-    rabl :spots_create, :format => "json"
+    rabl :post_spots, :format => "json"
   else
     status 400
     body("something went wrong duh".to_json)
