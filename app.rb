@@ -86,7 +86,7 @@ post '/users/avatar' do
 end
 
 get '/users/:id' do
-  @user = User.includes(:answers => :spot).find(params[:id])
+  @user = User.includes(:answers => :spot).includes(:reverse_relationships).find(params[:id])
   if @user
     status 200
     rabl :get_users_id, :format => "json"
