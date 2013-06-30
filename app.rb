@@ -28,6 +28,28 @@ get '/' do
   "Hello, world!"
 end
 
+patch '/users/:id/follow' do
+  @user_to_follow = User.find(params[:id])
+  @relationship = Relationship.new
+  @relationship.follower = @current_user
+  @relationship.followed = @user_to_follow
+  if @relationship && @relationship.save
+    status 204
+  else
+    status 400
+  end
+end
+
+delete '/users/:id/follow' do
+  @user_to_unfollow = User.find(params[:id])
+  @relationship_to_delete = Relationship.where(:follower_id => @current_user.id, :followed_id => @user_to_unfollow.id).first
+  if @relationship_to_delete && @relationship_to_delete.destroy
+    status 204
+  else
+    status 400
+  end
+end
+
 post '/users/signup' do
   @user = User.sign_up params
   if @user.errors.messages.any?
