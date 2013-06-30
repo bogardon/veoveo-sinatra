@@ -28,6 +28,16 @@ get '/' do
   "Hello, world!"
 end
 
+get '/users/:id/following' do
+  @users = Relationship.includes(:followed => :reverse_relationships).where(:follower_id => params[:id]).map(&:followed)
+  if @users
+    status 200
+    rabl :get_users_id_following, :format => :json
+  else
+    status 400
+  end
+end
+
 patch '/users/:id/follow' do
   @user_to_follow = User.find(params[:id])
   @relationship = Relationship.new
