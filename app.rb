@@ -8,6 +8,7 @@ require './models/facebook'
 require './models/spot'
 require './models/answer'
 require './models/relationship'
+require './lib/string'
 
 Rabl.register!
 
@@ -91,6 +92,11 @@ end
 get '/spots' do
   status 200
   @spots = Spot.in_region(params['region'])
+  unless params[:following].to_bool
+    user_ids = @current_user.relationships.map(&:followed_id)
+    user_ids << @current_user.id
+    @spots = @spots.where(:user_id => user_ids)
+  end
   rabl :get_spots, :format => "json"
 end
 
