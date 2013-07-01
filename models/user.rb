@@ -4,7 +4,6 @@ class User < ActiveRecord::Base
   attr_accessible :avatar, :username, :password, :email
 
   # relations
-  has_one :facebook, dependent: :destroy
   has_many :spots, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_attached_file :avatar, styles: {thumb: "100x100#", full: "640x640#"}
@@ -15,10 +14,6 @@ class User < ActiveRecord::Base
 
   # filters
   before_create :encrypt_password, :generate_api_token
-
-  # validations
-  validates_uniqueness_of :username, :email
-  validates_presence_of :username, :email, :password
 
   def self.sign_in(json)
     username = json['username']

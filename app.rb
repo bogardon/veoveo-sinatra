@@ -4,7 +4,6 @@ require 'bundler'
 Bundler.require
 require './config/environments'
 require './models/user'
-require './models/facebook'
 require './models/spot'
 require './models/answer'
 require './models/relationship'
