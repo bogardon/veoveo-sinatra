@@ -1,6 +1,8 @@
 class Answer < ActiveRecord::Base
   include Paperclip::Glue
 
+  default_scope :order => "created_at DESC"
+
   belongs_to :user
   belongs_to :spot
 
