@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
 
   attr_accessible :avatar, :username, :password, :email
 
+  attr_accessor :password_plain
+
   # relations
   has_many :spots, dependent: :destroy
   has_many :answers, dependent: :destroy
@@ -13,7 +15,9 @@ class User < ActiveRecord::Base
   has_many :followed_users, through: :relationships, source: :followed
 
   # filters
-  before_create :encrypt_password, :generate_api_token
+  before_create :generate_api_token
+
+  before_save :encrypt_password
 
   def self.sign_in(json)
     username = json['username']
@@ -25,13 +29,15 @@ class User < ActiveRecord::Base
   end
 
   def self.sign_up(json)
-    user = User.new username: json['username'], password: json['password'], email: json['email']
+    user = User.new username: json['username'], email: json['email']
+    user.password_plain = json['password']
     user.save
     user
   end
 
   def encrypt_password
-    self.password = Digest::SHA1.base64digest(self.password)
+    return unless self.password_plain
+    self.password = Digest::SHA1.base64digest(self.password_plain)
   end
 
   def generate_api_token
