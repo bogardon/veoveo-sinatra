@@ -18,7 +18,7 @@ end
 
 before do
   content_type 'application/json'
-  pass if %w[signup signin].include? request.path_info.split('/').last
+  pass if ["signup", "signin", nil].include? request.path_info.split('/').last
   api_token = request.env['HTTP_X_VEOVEO_API_TOKEN']
   @current_user = User.find_by_api_token(api_token) if api_token
   halt 401, "requires api token" unless @current_user
