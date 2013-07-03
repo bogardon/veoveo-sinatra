@@ -5,3 +5,10 @@ development:
   pool: 5
   encoding: unicode
   host: localhost
+production:
+  adapter: postgresql
+  database: veoveo_production
+  username: <%= ENV['USER'] %>
+  pool: 5
+  encoding: unicode
+  host: localhost

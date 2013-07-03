@@ -1,4 +1,8 @@
 development:
   bucket: veoveo-development
-  access_key_id: AKIAIVA7B5HXWD5D7GHA
-  secret_access_key: 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
+  access_key_id: <%= ENV['S3_DEVELOPMENT_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['S3_DEVELOPMENT_SECRET_ACCESS_KEY'] %>
+production:
+  bucket: veoveo-production
+  access_key_id: <%= ENV['S3_PRODUCTION_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['S3_PRODUCTION_SECRET_ACCESS_KEY'] %>
