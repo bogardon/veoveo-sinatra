@@ -48,6 +48,14 @@ class User < ActiveRecord::Base
     end while self.class.exists?(api_token: api_token)
   end
 
+  def follows_user?(user)
+    self.relationships.map(&:followed_id).include? user.id
+  end
+
+  def followed_by_user?(user)
+    self.reverse_relationships.map(&:follower_id).include? user.id
+  end
+
   def avatar_url_thumb
     avatar.url(:thumb)
   end
