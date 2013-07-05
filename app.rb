@@ -109,6 +109,15 @@ get '/spots/:id' do
   end
 end
 
+patch '/users/device_token' do
+  @current_user.device_token = params[:device_token]
+  if @current_user.save
+    status 204
+  else
+    status 400
+  end
+end
+
 post '/users/avatar' do
   image_data = params['avatar'][:tempfile]
   @current_user.avatar = image_data if image_data
