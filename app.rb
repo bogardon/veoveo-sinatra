@@ -8,6 +8,7 @@ require './models/spot'
 require './models/answer'
 require './models/relationship'
 require './lib/string'
+require './lib/push'
 
 Rabl.register!
 
