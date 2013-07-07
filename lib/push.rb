@@ -1,3 +1,4 @@
+require 'stringio'
 module Push
   @queue = :push
 
@@ -12,8 +13,10 @@ module Push
 
     environment = ENV['RACK_ENV'] || 'development'
 
+    cert = StringIO.new(ENV["APPLE_#{environment.upcase}_PUSH_CERT"])
+
     pusher = Grocer.pusher(
-      certificate: "./push_certs/veoveo_#{environment}_certificate.pem",      # required
+      certificate: cert,      # required
     )
     notification = Grocer::Notification.new(
       device_token:      device_token,
