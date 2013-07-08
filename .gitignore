@@ -2,3 +2,4 @@
 .ruby-version
 .env
 push_certs
+.elasticbeanstalk/
