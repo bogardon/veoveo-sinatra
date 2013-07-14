@@ -8,6 +8,18 @@ node(:unlocked) do |spot|
   end
 end
 
+child :user do
+  attributes :id, :username, :email
+
+  node(:avatar_url_thumb) do |u|
+    u.avatar.url(:thumb)
+  end
+
+  node(:avatar_url_full) do |u|
+    u.avatar.url(:full)
+  end
+end
+
 child :answers, :object_root => false do
   attributes :id, :created_at
 
