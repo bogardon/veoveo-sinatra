@@ -12,16 +12,18 @@ module Push
     alert = "#{answer_user.username} found #{spot.hint}!"
 
     environment = ENV['RACK_ENV'] || 'development'
-
     cert = StringIO.new(ENV["APPLE_#{environment.upcase}_PUSH_CERT"])
 
     pusher = Grocer.pusher(
-      certificate: cert,      # required
+      certificate: cert,
     )
     notification = Grocer::Notification.new(
-      device_token:      device_token,
-      alert:             alert,
-      badge:             1,
+      device_token: device_token,
+      alert: alert,
+      badge: 1,
+      custom: {
+        spot_id: spot.id,
+      }
     )
     pusher.push(notification)
   end
