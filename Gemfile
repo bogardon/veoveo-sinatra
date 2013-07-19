@@ -14,6 +14,7 @@ gem 'rack-contrib'
 gem 'rabl'
 gem 'resque'
 gem 'grocer'
+gem 'foreman'
 
 group :development do
   gem 'shotgun'
