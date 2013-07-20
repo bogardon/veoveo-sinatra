@@ -1,7 +1,5 @@
 class AddDeviceTokenToUsers < ActiveRecord::Migration
   def change
-    change_table :users do |t|
-      t.string :device_token
-    end
+    add_column :users, :device_token, :string
   end
 end
