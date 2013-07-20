@@ -12,7 +12,8 @@ module Push
     alert = "#{answer_user.username} found #{spot.hint}!"
 
     environment = ENV['RACK_ENV'] || 'development'
-    cert = StringIO.new(ENV["APPLE_#{environment.upcase}_PUSH_CERT"])
+    # dont know why but heroku env variables escape \n into \\n
+    cert = StringIO.new(ENV["APPLE_#{environment.upcase}_PUSH_CERT"].gsub("\\n","\n"))
 
     pusher = Grocer.pusher(
       certificate: cert,
