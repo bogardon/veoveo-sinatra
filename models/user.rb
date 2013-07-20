@@ -9,8 +9,8 @@ class User < ActiveRecord::Base
   has_many :spots, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_attached_file :avatar,
-    styles: {thumb: "100x100#", full: "640x640#"},
-    s3_headers: {'Expires' => 10.year.from_now.httpdate}
+    styles: {thumb: "100x100#", full: "640x640#"}
+    #s3_headers: {'Expires' => 10.year.from_now.httpdate}
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :reverse_relationships, foreign_key: "followed_id", class_name: "Relationship", dependent: :destroy
   has_many :followers, through: :reverse_relationships, source: :follower
