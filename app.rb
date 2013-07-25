@@ -60,7 +60,9 @@ get '/facebook/find_friends' do
     friend['id']
   end
   facebook_ids
-  @users = User.includes(:reverse_relationships).where(:facebook_id => facebook_ids)
+  @users = User.includes(:reverse_relationships).where(:facebook_id => facebook_ids).reject do |u|
+    u.followed_by_user?(@current_user)
+  end
   if @users
     status 200
     rabl :get_facebook_find_friends, :format => :json
