@@ -29,6 +29,19 @@ get '/' do
   "Hello, world!"
 end
 
+get '/spots/nearby' do
+  region = params['region']
+  @user_ids = @current_user.relationships.map(&:followed_id)
+  @spots = Spot.in_region(region).select do |s|
+    @user_ids.include?(s.user_id)
+  end.reject do |s|
+    s.answers.any? do |answer|
+      answer.user_id == @current_user.id
+    end
+  end
+  rabl :get_spots_nearby, :format => :json
+end
+
 get '/users/:id/following' do
   @users = Relationship.includes(:followed => :reverse_relationships).where(:follower_id => params[:id]).map(&:followed)
   if @users
@@ -59,7 +72,6 @@ get '/facebook/find_friends' do
   facebook_ids = me_friends.map do |friend|
     friend['id']
   end
-  facebook_ids
   @users = User.includes(:reverse_relationships).where(:facebook_id => facebook_ids).reject do |u|
     u.followed_by_user?(@current_user)
   end
