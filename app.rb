@@ -51,6 +51,59 @@ patch '/users/:id/follow' do
   end
 end
 
+get '/facebook/find_friends' do
+  facebook_access_token = @current_user.facebook_access_token
+  halt 400 unless facebook_access_token
+  graph = Koala::Facebook::API.new(facebook_access_token)
+  me_friends = graph.get_object('me/friends')
+  facebook_ids = me_friends.map do |friend|
+    friend['id']
+  end
+  facebook_ids
+  @users = User.includes(:reverse_relationships).where(:facebook_id => facebook_ids)
+  if @users
+    status 200
+    rabl :get_facebook_find_friends, :format => :json
+  else
+    status 400
+  end
+end
+
+post '/users/facebook' do
+  facebook_access_token = params['facebook_access_token']
+  facebook_expires_at = DateTime.parse(params['facebook_expires_at'])
+  halt 400 unless facebook_access_token && facebook_expires_at
+
+  graph = Koala::Facebook::API.new(facebook_access_token)
+
+  unless @current_user.facebook_id
+    me = graph.get_object("me")
+    facebook_id = me['id']
+    @current_user.facebook_id = facebook_id
+  else
+  end
+
+  @current_user.facebook_access_token = facebook_access_token
+  @current_user.facebook_expires_at = facebook_expires_at
+
+  if @current_user.save
+    status 201
+  else
+    status 400
+  end
+end
+
+delete '/users/facebook' do
+  @current_user.facebook_id = nil
+  @current_user.facebook_access_token = nil
+  @current_user.facebook_expires_at = nil
+  if @current_user.save
+    status 204
+  else
+    status 400
+  end
+end
+
 delete '/users/:id/follow' do
   @user_to_unfollow = User.find(params[:id])
   @relationship_to_delete = Relationship.where(:follower_id => @current_user.id, :followed_id => @user_to_unfollow.id).first
