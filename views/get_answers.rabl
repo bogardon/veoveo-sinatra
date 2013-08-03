@@ -11,7 +11,7 @@ node(:image_url_large) do |answer|
 end
 
 child :spot do
-  attributes :id, :latitude, :longitude, :hint, :created_at
+  attributes :id, :latitude, :longitude, :hint, :created_at, :user_id
 end
 
 child :user do
