@@ -224,6 +224,17 @@ post '/answers' do
   end
 end
 
+delete '/spots/:id' do
+  @spot = Spot.find(params[:id])
+  halt 400 unless @spot.user_id == @current_user.id
+  if @spot.destroy
+    status 204
+  else
+    status 400
+    body("could not delete".to_json)
+  end
+end
+
 post '/spots' do
   @spot = Spot.new params.slice('latitude', 'longitude', 'hint')
   @spot.user = @current_user
