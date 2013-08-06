@@ -207,6 +207,11 @@ get '/users/:id' do
   end
 end
 
+get '/users/:id/answers' do
+  @answers = Answer.includes(:spot).where(:user_id => params[:id]).limit(params['limit'].to_i || 10).offset(params['offset'].to_i || 10)
+  rabl :get_users_id_answers, :format => :json
+end
+
 post '/answers' do
   @spot = Spot.find(params["spot_id"])
 
