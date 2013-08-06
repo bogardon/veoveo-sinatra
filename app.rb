@@ -150,7 +150,7 @@ end
 
 get '/answers' do
   followed_users_ids = @current_user.followed_users.map(&:id)
-  @answers = Answer.includes(:spot, :user).where(:user_id => followed_users_ids)
+  @answers = Answer.includes(:spot, :user).where(:user_id => followed_users_ids).limit(params['limit'].to_i || 10).offset(params['offset'].to_i || 0)
   rabl :get_answers, :format => "json"
 end
 
