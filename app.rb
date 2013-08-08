@@ -53,7 +53,7 @@ get '/users/:id/following' do
 end
 
 patch '/users' do
-  if @current_user.update_attributes(params[:user])
+  if @current_user.update_attributes(params['user'])
     status 204
   else
     status 400
