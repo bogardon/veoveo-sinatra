@@ -53,6 +53,7 @@ get '/users/:id/following' do
 end
 
 patch '/users/:id/follow' do
+post '/users/:id/follow' do
   @user_to_follow = User.find(params[:id])
   @relationship = Relationship.new
   @relationship.follower = @current_user
