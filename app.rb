@@ -52,7 +52,14 @@ get '/users/:id/following' do
   end
 end
 
-patch '/users/:id/follow' do
+patch '/users' do
+  if @current_user.update_attributes(params[:user])
+    status 204
+  else
+    status 400
+  end
+end
+
 post '/users/:id/follow' do
   @user_to_follow = User.find(params[:id])
   @relationship = Relationship.new
