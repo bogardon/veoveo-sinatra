@@ -1,4 +1,5 @@
 # app.rb
+require 'stringio'
 require 'rubygems'
 require 'bundler'
 Bundler.require
@@ -8,7 +9,8 @@ require './models/spot'
 require './models/answer'
 require './models/relationship'
 require './lib/string'
-require './lib/push'
+require './lib/answer_push'
+require './lib/follow_push'
 
 Rabl.register!
 

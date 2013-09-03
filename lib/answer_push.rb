@@ -1,4 +1,3 @@
-require 'stringio'
 module AnswerPush
   @queue = :push
 
