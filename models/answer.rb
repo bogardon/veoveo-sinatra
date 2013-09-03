@@ -15,6 +15,6 @@ class Answer < ActiveRecord::Base
   after_create :remote_push, :if => Proc.new{self.spot.user.follows_user?(self.user) && self.spot.user.spot_answered_push_enabled}
 
   def remote_push
-    Resque.enqueue(Push, self.spot.user_id, self.user_id, self.spot.id)
+    Resque.enqueue(AnswerPush, self.spot.user_id, self.user_id, self.spot.id)
   end
 end

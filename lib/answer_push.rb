@@ -1,5 +1,5 @@
 require 'stringio'
-module Push
+module AnswerPush
   @queue = :push
 
   def self.perform(spot_user_id, answer_user_id, spot_id)
@@ -8,6 +8,9 @@ module Push
     answer_user = users[answer_user_id].first
 
     device_token = spot_user.device_token
+
+    return unless device_token
+
     spot = Spot.find(spot_id)
     alert = "#{answer_user.username} found #{spot.hint}!"
 
