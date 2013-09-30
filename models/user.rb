@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   include Paperclip::Glue
 
-  attr_accessible :avatar, :username, :password, :email, :spot_answered_push_enabled, :spots_nearby_push_enabled
+  attr_accessible :avatar, :username, :password, :email, :spot_answered_push, :spots_nearby_push, :followed_push
 
   attr_accessor :password_plain
 

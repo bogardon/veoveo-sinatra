@@ -12,7 +12,17 @@ class Answer < ActiveRecord::Base
 
   attr_accessible :image
 
-  after_create :remote_push, :if => Proc.new{self.spot.user.follows_user?(self.user) && self.spot.user.spot_answered_push_enabled}
+  after_create :remote_push, :if => Proc.new {
+    return false if self.user == self.spot.user
+    case self.user.spot_answered_push
+    when "anyone"
+      true
+    when "followed"
+      self.followed.follows_user(self.follower)
+    when "noone"
+      false
+    end
+  }
 
   def remote_push
     Resque.enqueue(AnswerPush, self.spot.user_id, self.user_id, self.spot.id)

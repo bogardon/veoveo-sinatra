@@ -35,7 +35,14 @@ get '/spots/nearby' do
   region = params['region']
   @user_ids = @current_user.relationships.map(&:followed_id)
   @spots = Spot.in_region(region).select do |s|
-    @user_ids.include?(s.user_id)
+    case @current_user.spots_nearby_push
+    when "anyone"
+      true
+    when "followed"
+      @user_ids.include?(s.user_id)
+    when "noone"
+      false
+    end
   end.reject do |s|
     s.answers.any? do |answer|
       answer.user_id == @current_user.id
