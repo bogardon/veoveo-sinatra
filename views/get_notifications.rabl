@@ -15,7 +15,7 @@ child :src_user => :src_user do
 end
 
 node(:answer) do |n|
-  if n.notifiable.is_a?(Answer)
+  if n.notifiable_type == "Answer"
     child :notifiable => :answer do |a|
       attributes :id, :created_at
       child :spot do |s|
