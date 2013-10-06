@@ -24,7 +24,21 @@ class Answer < ActiveRecord::Base
     end
   }
 
+  after_create :create_notification, :unless => Proc.new {
+    self.spot.user == self.user
+  }
+
   def remote_push
     Resque.enqueue(AnswerPush, self.spot.user_id, self.user_id, self.spot.id)
+  end
+
+  def create_notification
+    n = Notification.new
+    n.notifiable = self
+    n.src_user = self.user
+    n.dst_user = self.spot.user
+    n.created_at = self.created_at
+    n.updated_at = self.updated_at
+    n.save
   end
 end
