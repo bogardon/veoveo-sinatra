@@ -8,6 +8,7 @@ require './models/user'
 require './models/spot'
 require './models/answer'
 require './models/relationship'
+require './models/notification'
 require './lib/string'
 require './lib/answer_push'
 require './lib/follow_push'
@@ -163,6 +164,23 @@ post '/users/signin' do
     status 201
     rabl :post_users_signin, :format => "json"
   end
+end
+
+get '/notifications' do
+  @notifications = Notification.includes(:src_user, :notifiable).where(:dst_user_id => @current_user.id).limit(params['limit'].to_i || 10).offset(params['offset'].to_i || 0)
+
+  spot_ids = @notifications.select do |n|
+    n.notifiable_type == "Answer"
+  end.map do |n|
+    n.notifiable.spot_id
+  end
+  spots_by_id = Spot.find(spot_ids).group_by(&:id)
+  @notifications.each do |n|
+    next unless n.notifiable_type == "Answer"
+    n.notifiable.spot = spots_by_id[n.notifiable.spot_id].first
+  end
+
+  rabl :get_notifications, :format => :json
 end
 
 get '/answers' do
