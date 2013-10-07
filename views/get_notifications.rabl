@@ -14,18 +14,34 @@ child :src_user => :src_user do
   end
 end
 
-node(:answer) do |n|
-  if n.notifiable_type == "Answer"
-    child :notifiable => :answer do |a|
-      attributes :id, :created_at
-      child :spot do |s|
-        attributes :id, :latitude, :longitude, :hint, :created_at, :user_id
-      end
+child :notifiable => :notifiable do |n|
+  if n.is_a?(Answer)
+    attributes :id, :created_at
+    child :spot do |s|
+      attributes :id, :latitude, :longitude, :hint, :created_at, :user_id
     end
   else
     nil
   end
 end
+
+# node(:answer) do |n|
+#   case n.notifiable_type
+#   when "Answer"
+#     p 'answer'
+#     child :notifiable => :answer do |a|
+#       attributes :id, :created_at
+#       child :spot do |s|
+#         attributes :id, :latitude, :longitude, :hint, :created_at, :user_id
+#       end
+#     end
+#   when "Relationship"
+#     p 'relationship '
+#     child :notifiable => :relationship do |r|
+#       attributes :id
+#     end
+#   end
+# end
 
 # node(:relationship) do |n|
 #   if n.notifiable.is_a?(Relationship)
