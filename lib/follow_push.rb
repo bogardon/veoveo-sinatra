@@ -7,6 +7,15 @@ module FollowPush
     follower = users[follower_user_id].first
     followed = users[followed_user_id].first
 
+    return unless case followed.followed_push
+    when "anyone"
+      true
+    when "followed"
+      followed.follows_user_on_facebook?(follower)
+    when "noone"
+      false
+    end
+
     device_token = followed.device_token
 
     return unless device_token

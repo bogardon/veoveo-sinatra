@@ -54,6 +54,11 @@ class User < ActiveRecord::Base
     self.facebook_id? && self.facebook_access_token?
   end
 
+  def follows_user_on_facebook?(user)
+    return false unless self.facebook_connected? && user.facebook_connected?
+    self.facebook_friend_ids.include? user.facebook_id
+  end
+
   def facebook_friend_ids
     return [] unless self.facebook_connected?
     graph = Koala::Facebook::API.new(self.facebook_access_token)

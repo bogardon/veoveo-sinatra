@@ -4,16 +4,7 @@ class Relationship < ActiveRecord::Base
 
   has_one :notification, :as => :notifiable, :dependent => :destroy
 
-  after_create :remote_push, :if => Proc.new {
-    case self.followed.followed_push
-    when "anyone"
-      true
-    when "followed"
-      self.followed.follows_user(self.follower)
-    when "noone"
-      false
-    end
-  }
+  after_create :remote_push
 
   after_create :create_notification
 
