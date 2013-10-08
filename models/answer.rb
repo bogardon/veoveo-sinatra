@@ -14,11 +14,11 @@ class Answer < ActiveRecord::Base
 
   after_create :remote_push, :if => Proc.new {
     return false if self.user == self.spot.user
-    case self.user.spot_answered_push
+    case self.spot.user.spot_answered_push
     when "anyone"
       true
     when "followed"
-      self.followed.follows_user(self.follower)
+      self.spot.user.follows_user(self.user)
     when "noone"
       false
     end
