@@ -83,13 +83,7 @@ post '/users/:id/follow' do
 end
 
 get '/facebook/find_friends' do
-  facebook_access_token = @current_user.facebook_access_token
-  halt 400 unless facebook_access_token
-  graph = Koala::Facebook::API.new(facebook_access_token)
-  me_friends = graph.get_object('me/friends')
-  facebook_ids = me_friends.map do |friend|
-    friend['id']
-  end
+  facebook_ids = @current_user.facebook_friend_ids
   @users = User.includes(:reverse_relationships).where(:facebook_id => facebook_ids)
   if @users
     status 200

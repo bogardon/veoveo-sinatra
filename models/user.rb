@@ -50,6 +50,20 @@ class User < ActiveRecord::Base
     end while self.class.exists?(api_token: api_token)
   end
 
+  def facebook_connected?
+    self.facebook_id? && self.facebook_access_token?
+  end
+
+  def facebook_friend_ids
+    return [] unless self.facebook_connected?
+    graph = Koala::Facebook::API.new(self.facebook_access_token)
+    me_friends = graph.get_object('me/friends')
+    facebook_ids = me_friends.map do |friend|
+      friend['id']
+    end
+    facebook_ids
+  end
+
   def follows_user?(user)
     self.relationships.map(&:followed_id).include? user.id
   end
