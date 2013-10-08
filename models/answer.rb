@@ -6,6 +6,8 @@ class Answer < ActiveRecord::Base
   belongs_to :user
   belongs_to :spot
 
+  has_one :notification, :as => :notifiable, :dependent => :destroy
+
   has_attached_file :image,
     styles: {small: "320x320#", large: "640x640#"},
     s3_headers: {'Expires' => 10.year.from_now.httpdate}

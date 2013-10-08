@@ -2,6 +2,8 @@ class Relationship < ActiveRecord::Base
   belongs_to :follower, class_name: "User"
   belongs_to :followed, class_name: "User"
 
+  has_one :notification, :as => :notifiable, :dependent => :destroy
+
   after_create :remote_push, :if => Proc.new {
     case self.followed.followed_push
     when "anyone"
