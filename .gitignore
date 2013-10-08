@@ -3,3 +3,4 @@
 .env
 push_certs
 .elasticbeanstalk/
+latest.dump
