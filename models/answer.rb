@@ -20,7 +20,7 @@ class Answer < ActiveRecord::Base
     when "anyone"
       true
     when "followed"
-      self.spot.user.follows_user(self.user)
+      self.spot.user.follows_user?(self.user)
     when "noone"
       false
     end
