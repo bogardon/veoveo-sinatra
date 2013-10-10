@@ -1,3 +1,10 @@
+test:
+  adapter: postgresql
+  database: veoveo_test
+  username: <%= ENV['USER'] %>
+  pool: 5
+  encoding: unicode
+  host: localhost
 development:
   adapter: postgresql
   database: veoveo_development
