@@ -11,11 +11,15 @@ gem 'rake'
 gem 'paperclip'
 gem 'aws-sdk'
 gem 'rack-contrib'
-gem 'rack-test'
 gem 'rabl'
 gem 'resque'
 gem 'grocer'
 gem 'foreman'
+
+group :test do
+  gem 'rack-test'
+  gem 'rspec'
+end
 
 group :development do
   gem 'shotgun'
