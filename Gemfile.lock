@@ -116,6 +116,7 @@ DEPENDENCIES
   pg
   rabl
   rack-contrib
+  rack-test
   rake
   resque
   shotgun
