@@ -33,6 +33,7 @@ module FollowPush
       device_token: device_token,
       alert: alert,
       badge: 1,
+      sound: "default",
       custom: {
         user_id: follower.id,
       }

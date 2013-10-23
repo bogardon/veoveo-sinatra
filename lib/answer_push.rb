@@ -24,6 +24,7 @@ module AnswerPush
       device_token: device_token,
       alert: alert,
       badge: 1,
+      sound: "default",
       custom: {
         spot_id: spot.id,
       }
