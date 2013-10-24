@@ -25,6 +25,7 @@ GEM
     cocaine (0.5.1)
       climate_control (>= 0.0.3, < 1.0)
     daemons (1.1.9)
+    database_cleaner (1.2.0)
     diff-lcs (1.2.4)
     dotenv (0.8.0)
     eventmachine (1.0.3)
@@ -118,6 +119,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   aws-sdk
+  database_cleaner
   foreman
   grocer
   koala

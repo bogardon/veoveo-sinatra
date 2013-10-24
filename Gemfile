@@ -19,6 +19,7 @@ gem 'foreman'
 group :test do
   gem 'rack-test'
   gem 'rspec'
+  gem 'database_cleaner'
 end
 
 group :development do
