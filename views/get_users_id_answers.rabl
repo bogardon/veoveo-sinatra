@@ -1,6 +1,6 @@
 collection @answers
 
-attributes :id, :created_at
+attributes :id, :created_at, :user_id
 
 node(:image_url_small) do |answer|
   answer.image.url(:small)
