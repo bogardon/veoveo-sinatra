@@ -12,6 +12,7 @@ require './models/notification'
 require './lib/string'
 require './lib/answer_push'
 require './lib/follow_push'
+require './lib/facebook_push'
 
 Rabl.register!
 

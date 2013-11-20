@@ -21,6 +21,10 @@ class User < ActiveRecord::Base
 
   before_save :encrypt_password
 
+  after_save :notify_facebook_friends, :if => Proc.new {
+    self.facebook_id && self.facebook_id_changed?
+  }
+
   def self.sign_in(json)
     username = json['username']
     user = User.find_by_username username
@@ -35,6 +39,10 @@ class User < ActiveRecord::Base
     user.password_plain = json['password']
     user.save
     user
+  end
+
+  def notify_facebook_friends
+    Resque.enqueue(FacebookPush, self.id)
   end
 
   def encrypt_password
@@ -57,6 +65,11 @@ class User < ActiveRecord::Base
   def follows_user_on_facebook?(user)
     return false unless self.facebook_connected? && user.facebook_connected?
     self.facebook_friend_ids.include? user.facebook_id
+  end
+
+  def facebook_me
+    graph = Koala::Facebook::API.new(self.facebook_access_token)
+    graph.get_object('me')
   end
 
   def facebook_friend_ids
