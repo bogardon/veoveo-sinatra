@@ -20,7 +20,7 @@ module FacebookPush
       certificate: cert,
     )
 
-    alert = "#{facebook_me['first_name']} #{facebook_me['last_name']} just joined VeoVeo!"
+    alert = "#{facebook_me['first_name']} #{facebook_me['last_name']} just joined VeoVeo as #{user.username}!"
 
     notifications = facebook_friends.map do |u|
       Grocer::Notification.new(
