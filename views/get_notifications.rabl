@@ -1,6 +1,6 @@
 collection @notifications
 
-attributes :id, :created_at, :notifiable_type, :notifiable_id
+attributes :id, :created_at, :notifiable_type, :notifiable_id, :unread
 
 child :src_user => :src_user do
   attributes :id, :username, :email

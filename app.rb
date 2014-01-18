@@ -161,6 +161,12 @@ post '/users/signin' do
   end
 end
 
+patch '/notifications' do
+  @notifications = Notification.where(:dst_user_id => @current_user.id, :unread => true)
+  @notifications.update_all :unread => false
+  status 204
+end
+
 get '/notifications' do
   @notifications = Notification.includes(:src_user, :notifiable).where(:dst_user_id => @current_user.id).limit(params['limit'].to_i || 10).offset(params['offset'].to_i || 0)
 
