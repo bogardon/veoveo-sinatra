@@ -87,17 +87,15 @@ describe 'The VeoVeo App' do
 
   describe 'post /user/facebook' do
 
-    subject do
-      post '/users/facebook', {'facebook_access_token' => '123', 'facebook_expires_at' => Time.now.to_s}, {'HTTP_X_VEOVEO_API_TOKEN' => @user.api_token}
-    end
-
-
     context 'when facebook succeeds' do
       before :all do
         Koala::Facebook::API.any_instance.stubs(:get_object).with('me').returns({"id" => 1})
+        post '/users/facebook', {'facebook_access_token' => '123', 'facebook_expires_at' => Time.now.to_s}, {'HTTP_X_VEOVEO_API_TOKEN' => @user.api_token}
       end
 
-      its(:status) { should == 200 }
+      it 'should succeed' do
+        expect(last_response.status).to eq(201)
+      end
       it 'should set facebook_id' do
         subject
         expect(@user.reload.facebook_id).to eq(1.to_s)
