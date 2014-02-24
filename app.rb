@@ -201,7 +201,7 @@ get '/spots' do
 end
 
 get '/spots/:id' do
-  @spot = Spot.includes(:answers => :user).includes(:user).find(params[:id])
+  @spot = Spot.includes(:answers => :user).includes(:user).find_by_id(params[:id])
   if @spot
     status 200
     rabl :get_spots_id, :format => "json"
