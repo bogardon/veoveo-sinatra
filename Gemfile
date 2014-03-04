@@ -10,7 +10,7 @@ gem 'koala'
 gem 'rake'
 gem 'paperclip'
 gem 'aws-sdk'
-gem 'rack-contrib'
+gem 'rack-contrib', :git => "git@github.com:rack/rack-contrib.git", :branch => 'master'
 gem 'rabl'
 gem 'resque'
 gem 'grocer'
@@ -24,6 +24,7 @@ group :test do
 end
 
 group :development do
+  gem 'pry'
   gem 'shotgun'
   gem 'tux'
 end
